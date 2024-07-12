@@ -138,11 +138,17 @@ const rest = new REST({ version: '10' }).setToken(token);
 		// const cmds = await rest.get(
 		// 	Routes.applicationGuildCommands(clientId, guildId),
 		// );
+		// cmds.push(...(await rest.get(Routes.applicationCommands(clientId))));
 		// for (const cmd of cmds) {
-		// 	await rest.delete(
-		// 		Routes.applicationGuildCommand(clientId, guildId, cmd.id),
-		// 	);
+		// 	if (cmd.guildId) {
+		// 		await rest.delete(
+		// 			Routes.applicationGuildCommand(clientId, guildId, cmd.id),
+		// 		);
+		// 	} else {
+		// 		await rest.delete(Routes.applicationCommand(clientId, cmd.id));
+		// 	}
 		// }
+
 		console.log(
 			`Started refreshing ${commands.length} application (/) commands.`,
 		);

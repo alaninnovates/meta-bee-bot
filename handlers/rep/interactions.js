@@ -143,6 +143,17 @@ module.exports = {
 					return;
 				}
 				const user = interaction.options.getUser('user', true);
+				if (user.id === interaction.user.id) {
+					await interaction.reply({
+						embeds: [
+							new EmbedBuilder()
+								.setTitle('Error!')
+								.setDescription('You cannot give yourself rep!')
+								.setColor(Colors.Red),
+						],
+					});
+					return;
+				}
 				const coll = interaction.client.db.collection('rep');
 				let repAmt = 0;
 				if (await coll.has(user.id)) {

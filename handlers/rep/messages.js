@@ -97,21 +97,33 @@ module.exports = {
 							(config.vouchCooldown - cd) / 1000,
 						)} seconds before vouching again!`,
 					);
-					setTimeout(() => m.delete(), 5000);
+					setTimeout(async () => {
+						try {
+							await m.delete();
+						} catch (e) {}
+					}, 5000);
 					return;
 				}
 				if (!message.mentions.users.first()) {
 					const m = await message.reply(
 						'You must mention the user(s) you are vouching for!',
 					);
-					setTimeout(() => m.delete(), 5000);
+					setTimeout(async () => {
+						try {
+							await m.delete();
+						} catch (e) {}
+					}, 5000);
 					return;
 				}
 				if (message.mentions.users.has(message.author.id)) {
 					const m = await message.reply(
 						'You cannot vouch for yourself!',
 					);
-					setTimeout(() => m.delete(), 5000);
+					setTimeout(async () => {
+						try {
+							await m.delete();
+						} catch (e) {}
+					}, 5000);
 					return;
 				}
 				for (const userId of message.mentions.users.keys()) {
@@ -158,7 +170,11 @@ module.exports = {
 						(config.vouchCooldown - cd) / 1000,
 					)} seconds before vouching again!`,
 				);
-				setTimeout(() => m.delete(), 5000);
+				setTimeout(async () => {
+					try {
+						await m.delete();
+					} catch (e) {}
+				}, 5000);
 				return;
 			}
 			const threadUsers = await message.channel.members.fetch();
@@ -223,7 +239,11 @@ module.exports = {
 						(config.vouchCooldown - cd) / 1000,
 					)} seconds before giving rep again!`,
 				);
-				setTimeout(() => m.delete(), 5000);
+				setTimeout(async () => {
+					try {
+						await m.delete();
+					} catch (e) {}
+				}, 5000);
 				return;
 			}
 			await giveRep(targetUser.id, config.thanksPoints);

@@ -3,13 +3,11 @@ const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	'1052316363227660290': new EmbedBuilder().setDescription(stripIndent`
-Hello, Thank you for donating/boosting!
-Be sure to contact staff to claim perks.
-To list a few perks:
-:sparkles: Embed permissions: You can now send images and embed links in any channel!
-:sparkles: Special giveaways: Offer the user exclusive access to special giveaways or contests that are only available to Server Boosters.
+Hi there, thank you so much for donating/boosting!
+Make sure to contact staff to claim perks via <#997209367063572522>!
 
-You can find more information about perks with the </info perks:1185768728751783956> command.
+By supporting us, we get exclusive server perks & are able to add more to the server for our community!
+You can find more information about our booster perks with the </info perks:1185768728751783956> command.
 `) /*
 	'1065685975071719425': new EmbedBuilder().setDescription(stripIndent`
 Hey there! In this channel you can promote your coaching for BSS.
@@ -20,12 +18,10 @@ Please use following format while making an advertisement:
 *To get Coach role you have to contact staff and be at least level 5.*
 `),*/,
 	'1058044633420152842': new EmbedBuilder().setDescription(stripIndent`
-Hey there! In this channel we promote small BSS youtubers. 
-Requirements:
-<:yt:1058471302828138576> The video must be related to Bee Swarm Simulator. This means it should be focused on gameplay, strategies, or other aspects of the game.
-<:yt:1058471302828138576> The video must promote our Discord server. This could be through a mention in the video, a link in the description, or any other way that encourages viewers to join our community.
-<:yt:1058471302828138576> The channel must have at least 1,000 subscribers. This helps ensure that the content shared on our Discord channel is of high quality and reaches a wide audience.
-*If your video meets these requirements, please contact staff to get the role.*
+<:yt:1058471302828138576> View our partnered videos/streams here!
+
+Want to feature your content here too? Check out the requirements in <#996125775365427320>!
+
 `),
 	'1074337367252533329': new EmbedBuilder().setDescription(stripIndent`
 Hey there! In this channel you can share your VIP server to macro/grind with other. You are free to set requirements and kick/ban people. 
@@ -39,5 +35,10 @@ Hey there! In this channel you can ask people if you should keep/replace your am
 The requirement for the post is: 
 - Message must contain an image
 - You must state your gameplan (blue, red, white, mixed etc.)
+`),
+	'1257774162559107132': new EmbedBuilder().setDescription(stripIndent`
+Hey there! In this channel you can vouch for people who you have been helped by or deem trustworthy.
+
+For more information on how to vouch, please check out our introduction message [here](https://ptb.discord.com/channels/995988457136603147/1257774162559107132/1261353809272246506) or in pins!
 `),
 };

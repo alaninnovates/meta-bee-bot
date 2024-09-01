@@ -14,12 +14,25 @@ module.exports = {
 	run: async (message) => {
 		const cooldownColl = message.client.db.collection('repCooldown');
 		const giveRep = async (userId, amount) => {
+			if (userId in config.blacklist) {
+				await message.reply({
+					embeds: [
+						new EmbedBuilder()
+							.setColor(Colors.Red)
+							.setDescription(
+								'You cannot give rep as you are blacklisted for `rep abuse`.',
+							),
+					],
+				});
+				return false;
+			}
 			const coll = message.client.db.collection('rep');
 			if (await coll.has(userId)) {
 				await coll.set(userId, (await coll.get(userId)) + amount);
 			} else {
 				await coll.set(userId, amount);
 			}
+			return true;
 		};
 		const getCooldown = async (userId) => {
 			if (await cooldownColl.has(userId)) {
@@ -36,7 +49,11 @@ module.exports = {
 				) {
 					return;
 				}
-				await giveRep(message.author.id, config.ytPoints);
+				const success = await giveRep(
+					message.author.id,
+					config.ytPoints,
+				);
+				if (!success) return;
 				await sendRepLog(
 					message,
 					message.author,
@@ -44,7 +61,7 @@ module.exports = {
 					'YT Video',
 				);
 				await message.react('🔥');
-				break;
+				return;
 			}
 			case config.bumpChannelId: {
 				if (
@@ -54,14 +71,18 @@ module.exports = {
 				) {
 					return;
 				}
-				await giveRep(message.interaction.user.id, config.bumpPoints);
+				const success = await giveRep(
+					message.interaction.user.id,
+					config.bumpPoints,
+				);
+				if (!success) return;
 				await sendRepLog(
 					message,
 					message.interaction.user,
 					config.bumpPoints,
 					'Bumping the server',
 				);
-				break;
+				return;
 			}
 			case config.levelChannelId: {
 				if (
@@ -74,23 +95,25 @@ module.exports = {
 				const matches = [...message.content.matchAll(/\d+/g)];
 				if (!matches.length) return;
 				const level = parseInt(matches[1]);
-				await giveRep(
+				const success = await giveRep(
 					message.mentions.users.first().id,
 					Math.ceil(level / 10),
 				);
+				if (!success) return;
 				await sendRepLog(
 					message,
 					message.mentions.users.first(),
 					Math.ceil(level / 10),
 					`Leveling up to level ${level}`,
 				);
-				break;
+				return;
 			}
 			case config.vouchChannelId: {
 				if (message.author.bot) {
 					return;
 				}
 				const cd = await getCooldown(message.author.id);
+				console.log(cd);
 				if (cd !== 0 && cd < config.vouchCooldown) {
 					const m = await message.reply(
 						`You must wait ${Math.ceil(
@@ -127,7 +150,8 @@ module.exports = {
 					return;
 				}
 				for (const userId of message.mentions.users.keys()) {
-					await giveRep(userId, config.vouchPoints);
+					const success = await giveRep(userId, config.vouchPoints);
+					if (!success) return;
 					await sendRepLog(
 						message,
 						message.mentions.users.get(userId),
@@ -135,18 +159,9 @@ module.exports = {
 						`Vouch for user from ${message.author.tag}`,
 					);
 				}
-				const msg = `Successfully added 1 rep to: ${message.mentions.users
-					.map((u) => u.tag)
-					.join(', ')}`;
-				await message.channel.send({
-					embeds: [
-						new EmbedBuilder()
-							.setColor(Colors.Green)
-							.setDescription(msg),
-					],
-				});
+				await message.react('👍');
 				await cooldownColl.set(message.author.id, Date.now());
-				break;
+				return;
 			}
 		}
 		// handle thread case
@@ -183,7 +198,8 @@ module.exports = {
 				const u = await message.client.users.fetch(userId);
 				if (u.bot) continue;
 				if (u.id === op.id) continue;
-				await giveRep(userId, config.hiveSupportPoints);
+				const success = await giveRep(userId, config.hiveSupportPoints);
+				if (!success) return;
 				await sendRepLog(
 					message,
 					u,
@@ -246,7 +262,8 @@ module.exports = {
 				}, 5000);
 				return;
 			}
-			await giveRep(targetUser.id, config.thanksPoints);
+			const success = await giveRep(targetUser.id, config.thanksPoints);
+			if (!success) return;
 			await sendRepLog(
 				message,
 				targetUser,
@@ -254,7 +271,8 @@ module.exports = {
 				`Helping out ${message.author.tag}`,
 			);
 			await cooldownColl.set(message.author.id, Date.now());
-			await message.reply({
+			await message.react('👍');
+			const m = await message.reply({
 				embeds: [
 					new EmbedBuilder()
 						.setColor(Colors.Green)
@@ -263,6 +281,11 @@ module.exports = {
 						),
 				],
 			});
+			setTimeout(async () => {
+				try {
+					await m.delete();
+				} catch (e) {}
+			}, 5000);
 		}
 	},
 };

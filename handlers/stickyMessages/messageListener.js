@@ -13,16 +13,14 @@ module.exports = {
 		if (!stickyMessages[message.channel.id] || message.author.bot) return;
 		const coll = message.client.db.collection('stickyMessages');
 		if (await coll.has(message.channel.id)) {
-			const msg = await message.channel.messages.fetch(
-				await coll.get(message.channel.id),
-			);
-			if (msg) {
-				try {
+			try {
+				const msg = await message.channel.messages.fetch(
+					await coll.get(message.channel.id),
+				);
+				if (msg) {
 					await msg.delete();
-				} catch (e) {
-					console.error(e);
 				}
-			}
+			} catch (e) {}
 		}
 		const msg = await message.channel.send({
 			embeds: [

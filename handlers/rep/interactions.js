@@ -142,6 +142,19 @@ module.exports = {
 					);
 					return;
 				}
+				if (interaction.user.id in config.blacklist) {
+					await interaction.reply({
+						embeds: [
+							new EmbedBuilder()
+								.setTitle('Error!')
+								.setDescription(
+									'You are blacklisted from giving rep for `rep abuse`',
+								)
+								.setColor(Colors.Red),
+						],
+					});
+					return;
+				}
 				const user = interaction.options.getUser('user', true);
 				if (user.id === interaction.user.id) {
 					await interaction.reply({
